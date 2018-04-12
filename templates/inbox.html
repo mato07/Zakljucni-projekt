@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} Send message {% endblock title %}
+
+{% block body %}
+<h1>Bmail</h1>
+<h2>Uporabnik: {{ user.email() }}</h2>
+<h2>Prejeta sporočila: </h2>
+
+{% for sporocilo in prejeta_sporocila %}
+<p>{{ sporocilo.besedilo }}; {{ sporocilo.posilatelj }}</p>
+{% endfor %}
+
+{% endblock body %}

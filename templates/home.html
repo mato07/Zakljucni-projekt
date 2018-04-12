@@ -4,4 +4,21 @@
 
 {% block body %}
 <h1>Bmail</h1>
+
+{% if logiran %}
+    <h1>Živjo, {{ user.email() }}!</h1>
+
+    <p>
+        <a href="/send_message">Pošlji sporočilo</a>
+    </p>
+
+    <p>
+        <a href="{{ logout_url }}">Odjava</a>
+    </p>
+{% else %}
+    <h1>Živjo anonimnež!</h1>
+
+    <p>Prosim prijavi se: <a href="{{ login_url }}">Login</a></p>
+{% endif %}
+
 {% endblock body %}
