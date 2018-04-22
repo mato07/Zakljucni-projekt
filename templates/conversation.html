@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %} Conversation {% endblock title %}
+
+{% block body %}
+<h1>Bmail</h1>
+<h2>Uporabnik: {{ user.email() }}</h2>
+<h2>Pogovori: </h2>
+
+{% for uporabnik in relevantni_uporabniki %}
+    <p> {{uporabnik.email}} </p>
+    <a href="/conversation/{{uporabnik.key.id()}}">Link</a>
+{% endfor %}
+
+{% endblock body %}

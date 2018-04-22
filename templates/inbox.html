@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Send message {% endblock title %}
+{% block title %} Inbox {% endblock title %}
 
 {% block body %}
 <h1>Bmail</h1>
@@ -8,7 +8,7 @@
 <h2>Prejeta sporočila: </h2>
 
 {% for sporocilo in prejeta_sporocila %}
-<p>{{ sporocilo.besedilo }}; {{ sporocilo.posilatelj }}</p>
+<p>{{ sporocilo.besedilo }}; {{ sporocilo.posilatelj }}; {{ sporocilo.nastanek }}</p>
 {% endfor %}
 
 {% endblock body %}
