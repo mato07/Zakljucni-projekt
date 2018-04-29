@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Weather {% endblock title %}
+
+{% block body %}
+<h1>Bmail</h1>
+<h2>Uporabnik: {{ user.email() }}</h2>
+<h2>Trenutno vreme: </h2>
+{% if vreme.cod == "404" %}
+    <p>Meritev v tem mestu ne izvajamo.</p>
+    {% else %}
+    <p>Mesto: {{ vreme.name }}</p>
+    <p>Opis: {{ vreme.weather[0].description }}</p>
+    <p>Temperatura: {{ vreme.main.temp }}</p>
+    <p>Relativna vlažnost: {{ vreme.main.humidity }}</p>
+    {% endif %}
+{% endblock body %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} Weather {% endblock title %}
+
+{% block body %}
+<h1>Bmail</h1>
+<h2>Uporabnik: {{ user.email() }}</h2>
+<h2>Trenutno vreme: </h2>
+<form method="post" action="/weather_result">
+    <label for="kraj">Vpiši ime kraja za katerega te zanima trenutno vreme: </label>
+    <input type="text" id="kraj" name="vnos-kraj">
+    <br>
+    <br>
+    <button type="submit">Pošlji</button>
+</form>
+{% endblock body %}

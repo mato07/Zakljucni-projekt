@@ -2,11 +2,12 @@
 import os
 import jinja2
 import webapp2
+import json
 from google.appengine.api import users # uporabljeno za login
 from models import Sporocilo
 from models import Uporabnik
 from google.appengine.ext import ndb
-
+from google.appengine.api import urlfetch
 
 template_dir = os.path.join(os.path.dirname(__file__), "templates")
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=False)
@@ -126,6 +127,23 @@ class AconversationHandler(BaseHandler):
         params = {"pogovor": pogovor, "user": user}
         return self.render_template("aconversation.html", params)
 
+class WeatherHandler(BaseHandler):
+    def get(self):
+        user = users.get_current_user()
+        params = {"user": user}
+        return self.render_template("vreme.html", params)
+
+class WeatherResultHandler(BaseHandler):
+    def post(self):
+        vneseni_kraj = self.request.get("vnos-kraj")
+        vneseni_kraj = vneseni_kraj.lower()
+        vneseni_kraj = vneseni_kraj.capitalize()
+        user = users.get_current_user()
+        url = "http://api.openweathermap.org/data/2.5/weather?q=" + vneseni_kraj + "&units=metric&appid=bc404a534664f0682a9e960d80ad241f"
+        stran = urlfetch.fetch(url).content
+        vreme = json.loads(stran)
+        params = {"vreme": vreme, "user": user}
+        return self.render_template("weather_result.html", params)
 
 app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler),
@@ -135,4 +153,6 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/outbox', OutboxHandler),
     webapp2.Route('/conversation', ConversationHandler),
     webapp2.Route('/conversation/<uporabnik_id:\d+>', AconversationHandler),
+    webapp2.Route('/weather', WeatherHandler),
+    webapp2.Route('/weather_result', WeatherResultHandler),
 ], debug=True)
