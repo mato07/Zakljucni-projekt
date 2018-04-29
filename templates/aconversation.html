@@ -7,12 +7,12 @@
 <h2>Uporabnik: {{ user.email() }}</h2>
 <h2>Poslana sporočila: </h2>
 
-{% for sporocilo in poslani_pogovor %}
-<p>{{ sporocilo.besedilo }}; {{sporocilo.nastanek}}</p>
-{% endfor %}
-
-{% for sporocilo in prejeti_pogovor %}
-<p>{{ sporocilo.besedilo }}; {{sporocilo.nastanek}}</p>
+{% for sporocilo in pogovor %}
+    {% if sporocilo.posilatelj == user.email() %}
+        <p>{{ sporocilo.besedilo }}; {{sporocilo.nastanek}}</p>
+    {% else %}
+        <p align="right">{{ sporocilo.besedilo }}; {{sporocilo.nastanek}}</p>
+    {% endif %}
 {% endfor %}
 
 {% endblock body %}
