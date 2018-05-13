@@ -13,12 +13,12 @@ indexes:
 - kind: Sporocilo
   properties:
   - name: posilatelj
-  - name: prejemnik
   - name: nastanek
 
 - kind: Sporocilo
   properties:
   - name: posilatelj
+  - name: prejemnik
   - name: nastanek
 
 - kind: Sporocilo

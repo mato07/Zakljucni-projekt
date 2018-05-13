@@ -1,40 +1,55 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Home</title>
+        <link rel="icon" type="image/png" sizes="16x16" href="/assets/slike/favicon-16x16.png">
+        <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/assets/css/style.css">
+    </head>
 
-{% block title %} Home {% endblock title %}
+    <body>
+        <div>
+        {% if logiran %}
+            <h1>Živjo, {{ user.email() }}!</h1>
 
-{% block body %}
-<h1>Bmail</h1>
+            <p>
+                <a href="/send_message">Pošlji sporočilo</a>
+            </p>
 
-{% if logiran %}
-    <h1>Živjo, {{ user.email() }}!</h1>
+            <p>
+                <a href="{{ logout_url }}">Odjava</a>
+            </p>
 
-    <p>
-        <a href="/send_message">Pošlji sporočilo</a>
-    </p>
+            <p>
+                <a href="/inbox">Prejeta sporocila</a>
+            </p>
 
-    <p>
-        <a href="{{ logout_url }}">Odjava</a>
-    </p>
+            <p>
+                <a href="/outbox">Poslana sporocila</a>
+            </p>
 
-    <p>
-        <a href="/inbox">Prejeta sporocila</a>
-    </p>
+            <p>
+                <a href="/conversation">Pogovori</a>
+            </p>
 
-    <p>
-        <a href="/outbox">Poslana sporocila</a>
-    </p>
+            <p>
+                <a href="/weather">Trenutno vreme</a>
+            </p>
+        </div>
 
-    <p>
-        <a href="/conversation">Pogovori</a>
-    </p>
+        {% else %}
+            <div class="jumbotron jumbotron-fluid bg-info text-white" id="bootstrap-override">
+                <div class="container">
+                    <h1 class="display-4">Bmail</h1>
+                    <p class="lead">The future of interaction is finally here</p>
+                </div>
+            </div>
 
-    <p>
-        <a href="/weather">Trenutno vreme</a>
-    </p>
-{% else %}
-    <h1>Živjo anonimnež!</h1>
+            <p>Prosim prijavi se: <a href="{{ login_url }}">Login</a></p>
+        {% endif %}
+    </body>
+</html>
 
-    <p>Prosim prijavi se: <a href="{{ login_url }}">Login</a></p>
-{% endif %}
 
-{% endblock body %}
