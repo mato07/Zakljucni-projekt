@@ -1,4 +1,50 @@
-#bootstrap-override {
+.jumbotron {
     padding: 1rem 1rem;;
+    margin-bottom: 100px;
     }
+
+.manjse {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.lezece {
+    font-style: italic;
+    font-size: 20px;
+}
+
+.naslov {
+    margin-top:30px;
+}
+
+.mar-cards {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.mar-between-cards {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.upper-padding {
+    padding-top: 56px;
+}
+
+/* kodo spodaj za html body in footer sem dodalda je footer zmeraj spodaj (ne glede na vsebino in da ni fiksno pozicioniran*/
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 56px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
 
