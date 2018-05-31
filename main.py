@@ -10,7 +10,8 @@ from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 
 template_dir = os.path.join(os.path.dirname(__file__), "templates")
-jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=False)
+jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir),extensions=['jinja2.ext.loopcontrols'], autoescape=False) # dodal sem extensions da sem lahko pri aconversations uporabil break loop
+
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -61,8 +62,9 @@ class MainHandler(BaseHandler):
 
 class SendMessageHandler(BaseHandler):
     def get(self):
+        logout_url = users.create_logout_url('/')  # ustvari povezavo za logout
         user = users.get_current_user()
-        params = {"user": user}
+        params = {"user": user, "logout_url": logout_url}
         return self.render_template("send_message.html", params) # vrne send message stran
 
 
@@ -78,24 +80,27 @@ class SendMessageResultHandler(BaseHandler):
 
 class InboxHandler(BaseHandler):
     def get(self):
+        logout_url = users.create_logout_url('/')  # ustvari povezavo za logout
         user = users.get_current_user()
         trenutni_uporabnik = user.email()
         prejeta_sporocila = Sporocilo.query().filter(Sporocilo.prejemnik == trenutni_uporabnik)\
             .order(Sporocilo.nastanek).fetch() # prikaze prejeta sporocila logiranega uporabnika; order ukaz jih razvrsti po datumu
-        params = {"prejeta_sporocila": prejeta_sporocila, "user": user}
+        params = {"prejeta_sporocila": prejeta_sporocila, "user": user, "logout_url": logout_url}
         return self.render_template("inbox.html", params)
 
 class OutboxHandler(BaseHandler):
     def get(self):
+        logout_url = users.create_logout_url('/')  # ustvari povezavo za logout
         user = users.get_current_user()
         trenutni_uporabnik = user.email()
         poslana_sporocila = Sporocilo.query().filter(Sporocilo.posilatelj == trenutni_uporabnik)\
             .order(Sporocilo.nastanek).fetch() # prikaze poslana sporocila logiranega uporabnika; order ukaz jih razvrsti po datumu
-        params = {"poslana_sporocila": poslana_sporocila, "user": user}
+        params = {"poslana_sporocila": poslana_sporocila, "user": user, "logout_url": logout_url}
         return self.render_template("outbox.html", params)
 
 class ConversationHandler(BaseHandler):
     def get(self):
+        logout_url = users.create_logout_url('/')  # ustvari povezavo za logout
         user = users.get_current_user()
         trenutni_uporabnik = user.email()
         uporabnik_sporocila = Sporocilo.query(ndb.OR(Sporocilo.posilatelj == trenutni_uporabnik,
@@ -111,11 +116,12 @@ class ConversationHandler(BaseHandler):
             relevantni_uporabniki = Uporabnik.query(Uporabnik.email.IN(uporabniki_pogovor)).fetch() # iz baze shranjenih uporabnikov s pomocjo liste uporabniki_pogovor potegnemo te uporabnike
         else:
             relevantni_uporabniki = []
-        params = {"user": user, "uporabniki_pogovor": uporabniki_pogovor, "relevantni_uporabniki": relevantni_uporabniki}
+        params = {"user": user, "uporabniki_pogovor": uporabniki_pogovor, "relevantni_uporabniki": relevantni_uporabniki, "logout_url": logout_url}
         return self.render_template("conversation.html", params)
 
 class AconversationHandler(BaseHandler):
     def get(self, uporabnik_id):
+        logout_url = users.create_logout_url('/')  # ustvari povezavo za logout
         user = users.get_current_user()
         trenutni_uporabnik = user.email()
         uporabnik = Uporabnik.get_by_id(int(uporabnik_id))
@@ -124,17 +130,37 @@ class AconversationHandler(BaseHandler):
         pogovor = Sporocilo.query(ndb.OR(ndb.AND(Sporocilo.posilatelj == trenutni_uporabnik, Sporocilo.prejemnik == uporabnik_mail),
                                           ndb.AND(Sporocilo.posilatelj == uporabnik_mail, Sporocilo.prejemnik == trenutni_uporabnik)))\
             .order(Sporocilo.nastanek).fetch()
-        params = {"pogovor": pogovor, "user": user}
+
+        # ista koda kot zgoraj zato da je lahko leva orodna vrstica na strani posameznega pogovora vedno enaka
+        uporabnik_sporocila = Sporocilo.query(ndb.OR(Sporocilo.posilatelj == trenutni_uporabnik,
+                                                     Sporocilo.prejemnik == trenutni_uporabnik)) \
+            .order(
+            Sporocilo.nastanek).fetch()  # vrne vsa sporocila v katerih je posilatelj ali prejemnik logirani uporabnik; za ukaz order nisem preprican da ima kaksen pomen tu
+        uporabniki_pogovor = []  # v to listo se shrani uporabnik ki je logiranemu kaj posiljal ali pa od njega prejel sporocila
+        for sporocilce in uporabnik_sporocila:
+            if sporocilce.prejemnik not in uporabniki_pogovor and sporocilce.prejemnik != trenutni_uporabnik:
+                uporabniki_pogovor.append(sporocilce.prejemnik)
+            if sporocilce.posilatelj not in uporabniki_pogovor and sporocilce.posilatelj != trenutni_uporabnik:
+                uporabniki_pogovor.append(sporocilce.posilatelj)
+        if uporabniki_pogovor != []:  # ta if zanka je potrebna ker drugace za uporabnika ki se ni nic posiljal povezava pogovori ne dela
+            relevantni_uporabniki = Uporabnik.query(Uporabnik.email.IN(
+                uporabniki_pogovor)).fetch()  # iz baze shranjenih uporabnikov s pomocjo liste uporabniki_pogovor potegnemo te uporabnike
+        else:
+            relevantni_uporabniki = []
+
+        params = {"pogovor": pogovor, "user": user, "uporabniki_pogovor": uporabniki_pogovor, "relevantni_uporabniki": relevantni_uporabniki, "logout_url": logout_url}
         return self.render_template("aconversation.html", params)
 
 class WeatherHandler(BaseHandler):
     def get(self):
+        logout_url = users.create_logout_url('/')  # ustvari povezavo za logout
         user = users.get_current_user()
-        params = {"user": user}
+        params = {"user": user, "logout_url": logout_url}
         return self.render_template("vreme.html", params)
 
 class WeatherResultHandler(BaseHandler):
     def post(self):
+        logout_url = users.create_logout_url('/')  # ustvari povezavo za logout
         vneseni_kraj = self.request.get("vnos-kraj")
         vneseni_kraj = vneseni_kraj.lower()
         vneseni_kraj = vneseni_kraj.capitalize()
@@ -142,7 +168,7 @@ class WeatherResultHandler(BaseHandler):
         url = "http://api.openweathermap.org/data/2.5/weather?q=" + vneseni_kraj + "&units=metric&appid=bc404a534664f0682a9e960d80ad241f"
         stran = urlfetch.fetch(url).content
         vreme = json.loads(stran)
-        params = {"vreme": vreme, "user": user}
+        params = {"vreme": vreme, "user": user, "logout_url": logout_url}
         return self.render_template("weather_result.html", params)
 
 app = webapp2.WSGIApplication([

@@ -3,16 +3,61 @@
 {% block title %} Conversation {% endblock title %}
 
 {% block body %}
-<h1>Bmail</h1>
-<h2>Uporabnik: {{ user.email() }}</h2>
-<h2>Poslana sporočila: </h2>
 
-{% for sporocilo in pogovor %}
-    {% if sporocilo.posilatelj == user.email() %}
-        <p>{{ sporocilo.besedilo }}; {{sporocilo.nastanek}}</p>
-    {% else %}
-        <p align="right">{{ sporocilo.besedilo }}; {{sporocilo.nastanek}}</p>
-    {% endif %}
-{% endfor %}
+<div class="kontejner">
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <ul class="style-ul">
+            {% for uporabnik in relevantni_uporabniki %}
+                <li class="style-li"> <a href="/conversation/{{uporabnik.key.id()}}">{{uporabnik.email}}</a> </li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="col-lg-9 col-md-8 col-sm-6 pt-2" id="overflow-right">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5>{{user.email()}}</h5>
+                    </div>
+                    <div>
+                        {% for sporocilo in pogovor %}
+                        {% if sporocilo.posilatelj == user.email() %}
+                        <h5>{{sporocilo.prejemnik}}</h5>
+                        {% break %}
+                        {% else %}
+                        <h5>{{sporocilo.posilatelj}}</h5>
+                        {% break %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% for sporocilo in pogovor %}
+                    {% if sporocilo.posilatelj == user.email() %}
+                        <!--<p>{{ sporocilo.besedilo }}; {{sporocilo.nastanek}}</p>-->
+                        <div class="card mar-between-cards w-51">
+                          <div class="card-body">
+                            <p class="card-text">{{ sporocilo.besedilo }}</p>
+                          </div>
+                          <div class="card-footer text-muted">
+                            Time recieved: {{ sporocilo.nastanek }}
+                          </div>
+                        </div>
+                    {% else %}
+                        <!--<p class="text-right">{{ sporocilo.besedilo }}; {{sporocilo.nastanek}}</p>-->
+                        <div class="card mar-between-cards w-51 float-right">
+                          <div class="card-body">
+                            <p class="card-text">{{ sporocilo.besedilo }}</p>
+                          </div>
+                          <div class="card-footer text-muted">
+                            Time recieved: {{ sporocilo.nastanek }}
+                          </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
 
 {% endblock body %}
