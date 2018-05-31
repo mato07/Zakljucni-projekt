@@ -3,12 +3,24 @@
 {% block title %} Inbox {% endblock title %}
 
 {% block body %}
-<h1>Bmail</h1>
-<h2>Uporabnik: {{ user.email() }}</h2>
-<h2>Prejeta sporočila: </h2>
 
+<h3 class="ml-5 mt-3 barva">Inbox for {{ user.email() }}: </h3>
+
+<div class="ml-5">
 {% for sporocilo in prejeta_sporocila %}
-<p>{{ sporocilo.besedilo }}; {{ sporocilo.posilatelj }}; {{ sporocilo.nastanek }}</p>
+    <div class="card mar-between-cards w-50">
+      <div class="card-header text-white">
+        From: {{ sporocilo.posilatelj }}
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{ sporocilo.besedilo }}</p>
+      </div>
+      <div class="card-footer text-muted">
+        Time recieved: {{ sporocilo.nastanek }}
+      </div>
+    </div>
 {% endfor %}
+</div>
 
 {% endblock body %}
+

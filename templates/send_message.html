@@ -3,17 +3,27 @@
 {% block title %} Send message {% endblock title %}
 
 {% block body %}
-<h1>Bmail</h1>
-<h2>Uporabnik: {{ user.email() }}</h2>
-<form method="post" action="/result">
-    <label for="sporocilo">Vpiši sporočilo: </label>
-    <input type="text" id="sporocilo" name="vnos-sporocilo">
-    <br>
-    <br>
-    <label for="prejemnik">Vpiši prejemnika: </label>
-    <input type="text" id="prejemnik" name="vnos-prejemnik">
-    <br>
-    <br>
-    <button type="submit">Pošlji</button>
-</form>
+<div class="container send-message">
+    <div class="row">
+        <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                <form method="post" action="/result">
+                    <div class="form-group">
+                        <label for="prejemnik">Send to: </label>
+                        <br>
+                        <input type="email" class="form-control" id="prejemnik" name="vnos-prejemnik" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="sporocilo">Message: </label>
+                        <br>
+                        <textarea class="form-control" id="sporocilo" name="vnos-sporocilo" placeholder="Enter your message" rows="5"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-info">Send</button>
+                    </div>
+                </form>
+            </div>
+        <div class="col-lg-2"></div>
+    </div>
+</div>
 {% endblock body %}

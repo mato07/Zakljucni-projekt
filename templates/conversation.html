@@ -3,13 +3,24 @@
 {% block title %} Conversation {% endblock title %}
 
 {% block body %}
-<h1>Bmail</h1>
-<h2>Uporabnik: {{ user.email() }}</h2>
-<h2>Pogovori: </h2>
 
-{% for uporabnik in relevantni_uporabniki %}
-    <p> {{uporabnik.email}} </p>
-    <a href="/conversation/{{uporabnik.key.id()}}">Link</a>
-{% endfor %}
+<div class="kontejner">
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <ul class="style-ul">
+            {% for uporabnik in relevantni_uporabniki %}
+                <li class="style-li"> <a href="/conversation/{{uporabnik.key.id()}}">{{uporabnik.email}}</a> </li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="col-lg-9 col-md-8 col-sm-6 align-self-center" id="overflow-right">
+            <div class="row h-100">
+                <div class="col align-self-center text-center">
+                    <h1 class="display-5">Please select a person in the left menu</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock body %}
