@@ -3,15 +3,17 @@
 {% block title %} Weather {% endblock title %}
 
 {% block body %}
-<h1>Bmail</h1>
-<h2>Uporabnik: {{ user.email() }}</h2>
-<h2>Trenutno vreme: </h2>
+<br>
+<h3 class="text-center">Weather report: </h3>
+<br>
 {% if vreme.cod == "404" %}
-    <p>Meritev v tem mestu ne izvajamo.</p>
+    <p class="text-center"> Please check your spelling. We do not know the city you entered.</p>
     {% else %}
-    <p>Mesto: {{ vreme.name }}</p>
-    <p>Opis: {{ vreme.weather[0].description }}</p>
-    <p>Temperatura: {{ vreme.main.temp }}</p>
-    <p>Relativna vlažnost: {{ vreme.main.humidity }}</p>
+    <div class="text-center">
+        <p>City: {{ vreme.name }}</p>
+        <p>Weather description: {{ vreme.weather[0].description }}</p>
+        <p>Temperature: {{ vreme.main.temp }}</p>
+        <p>Relative humidity: {{ vreme.main.humidity }}</p>
+    </div>
     {% endif %}
 {% endblock body %}

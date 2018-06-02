@@ -3,14 +3,20 @@
 {% block title %} Weather {% endblock title %}
 
 {% block body %}
-<h1>Bmail</h1>
-<h2>Uporabnik: {{ user.email() }}</h2>
-<h2>Trenutno vreme: </h2>
+<br>
+<br>
+<h3 class="text-center">Current weather: </h3>
+<br>
 <form method="post" action="/weather_result">
-    <label for="kraj">Vpiši ime kraja za katerega te zanima trenutno vreme: </label>
-    <input type="text" id="kraj" name="vnos-kraj">
-    <br>
-    <br>
-    <button type="submit">Pošlji</button>
+    <div class="form-group text-center">
+        <labelfor="kraj">Enter the name of the city, for which you would like to know the weather: </label>
+        <br>
+        <br>
+        <input type="text" class="form-control sirina-input mx-auto" id="kraj" name="vnos-kraj" placeholder="Enter city name">
+        <br>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-info">Check it out</button>
+    </div>
 </form>
 {% endblock body %}
